@@ -13,7 +13,10 @@ import { CreateUserDto } from 'src/user/dtos/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './dtos/login.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -23,6 +26,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @ApiBody({ type: LoginDto })
   async login(@Request() req, @Res({ passthrough: true }) response) {
     const { refresh_token, access_token, ...user } =
       await this.authService.login(req.user);
@@ -59,6 +63,7 @@ export class AuthController {
     return { message: 'Logged out' };
   }
 
+  @ApiBody({ type: CreateUserDto })
   @Post('register')
   async register(@Body() body: CreateUserDto) {
     return await this.userService.create(body);

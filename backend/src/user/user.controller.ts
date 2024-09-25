@@ -11,7 +11,9 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dtos/create-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -24,7 +26,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async findUsers(
-    @Query('search') search: string,
+    @Query('search') search?: string,
     @Query('page') page: string = '1',
     @Query('pageSize') pageSize: string = '10',
   ) {
