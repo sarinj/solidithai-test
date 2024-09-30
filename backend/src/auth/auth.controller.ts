@@ -46,6 +46,7 @@ export class AuthController {
     return user;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout(@Res({ passthrough: true }) response) {
     response.cookie('act', '', {

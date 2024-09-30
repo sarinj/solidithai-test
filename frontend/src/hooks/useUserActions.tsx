@@ -9,7 +9,6 @@ type SignUpData = {
 export function useUserActions() {
   async function signUp(userData: SignUpData) {
     const resp = await request.post('/auth/register', userData)
-    console.log(resp)
     return resp.data
   }
 
