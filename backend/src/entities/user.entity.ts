@@ -8,6 +8,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Comment } from './comment.entity';
 import { Exclude } from 'class-transformer';
+import { AuditLogs } from './audit_log.entity';
 
 @Entity()
 export class User {
@@ -26,6 +27,9 @@ export class User {
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
+
+  @OneToMany(() => AuditLogs, (AuditLogs) => AuditLogs.user)
+  auditLogs: AuditLogs[];
 
   @BeforeInsert()
   async hashPassword() {

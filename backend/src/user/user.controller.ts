@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dtos/create-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { AuditLog } from 'src/decorators/audit-log.decorator';
 
 @ApiTags('User')
 @Controller('user')
@@ -23,6 +24,7 @@ export class UserController {
     return this.userService.findOne(parseInt(id));
   }
 
+  @AuditLog('findUsers')
   @UseGuards(JwtAuthGuard)
   @Get()
   async findUsers(
@@ -49,11 +51,13 @@ export class UserController {
   }
 
   @Post()
+  @AuditLog('createUser')
   createuser(@Body() body: CreateUserDto) {
     return this.userService.create(body);
   }
 
   @Put(':id')
+  @AuditLog('updateUser')
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.userService.update(parseInt(id), body);
   }

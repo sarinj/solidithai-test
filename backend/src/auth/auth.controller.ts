@@ -15,6 +15,7 @@ import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dtos/login.dto';
+import { AuditLog } from 'src/decorators/audit-log.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -24,6 +25,7 @@ export class AuthController {
     private userService: UserService,
   ) {}
 
+  @AuditLog('login')
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiBody({ type: LoginDto })
@@ -46,6 +48,7 @@ export class AuthController {
     return user;
   }
 
+  @AuditLog('logout')
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout(@Res({ passthrough: true }) response) {
@@ -70,6 +73,7 @@ export class AuthController {
     return await this.userService.create(body);
   }
 
+  @AuditLog('refreshToken')
   @UseGuards(RefreshJwtAuthGuard)
   @Post('refresh')
   async refresh(@Request() req, @Res({ passthrough: true }) response) {
@@ -85,6 +89,7 @@ export class AuthController {
     return;
   }
 
+  @AuditLog('me')
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@Request() req) {
